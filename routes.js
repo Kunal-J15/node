@@ -7,6 +7,7 @@ module.exports=(req,res)=>{
         data.pop();
         let insert = data.map((e)=>'<h3>'+e.split("=")[1]+'</h3>').reduce((str,e)=>str=e+str,"");
         res.setHeader('Content-Type','text/html');
+        
         res.write('<html>');
         res.write("<head><title>My First Page</title></head>");
         res.write(`<body>${insert}<form action="/message" method="post"><input type="text" name="mes"><button>Submit</button></form></body>`);
