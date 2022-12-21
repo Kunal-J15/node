@@ -1,18 +1,31 @@
-const route = require("./routes");
+
 const express = require("express");
+
 const adminRoute = require("./routes/admin");
 const shopRoute = require("./routes/shop");
 const app = express();
 
-app.use(express.urlencoded({extended:true}));
+const path = require("path");
+const rootDir = require("./utils/path.js");
 
+app.use(express.urlencoded({extended:true}));
+app.use(express.static('public'))
 app.use("/admin",adminRoute);
 app.use("/shop",shopRoute);
 app.get("/",(req,res)=>{
     res.redirect("/admin/add-product")
 })
+
+app.get("/contactUs",(req,res)=>{
+    res.sendFile(path.join(rootDir,"views","contactus.html"));
+})
+
+app.post("/success",(req,res)=>{
+    res.send("successfully submited");
+})
+
 app.use("*",(req,res,next)=>{
-    res.status(404).send('<h1>404 Page Not Found</h1> <a href="/admin/add-product">home</a>' )
+    res.status(404).sendFile(path.join(rootDir,"views","page404.html"))
 });
 app.listen(3000);
 
