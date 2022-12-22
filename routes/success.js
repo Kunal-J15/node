@@ -1,6 +1,7 @@
 const express = require("express");
-const { shop } = require("../controllers/shop");
+const { success } = require("../controllers/success.js");
 const router = express.Router({mergeParams:true});
 
-router.use("/",shop);
+router.get("/",success)
+
 module.exports = router;
