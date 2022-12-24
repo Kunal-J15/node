@@ -29,3 +29,32 @@ exports.getProducts = (req, res, next) => {
     });
   });
 };
+exports.getEditProduct = (req, res, next) => {
+  const editMode = req.query.edit;
+  const id = req.params.id;
+  Product.getProduct(id,(product)=>{
+     res.render('admin/edit-product', {
+    pageTitle: 'Edit Product',
+    path: '/admin/edit-product',
+    editing:editMode,
+    product:product
+  });
+  
+  });
+};
+exports.editProduct = (req, res, next) => {
+  const {title, imageUrl, description, price} = req.body;
+  const id = req.params.id;
+  console.log(id);
+  const product = new Product(title, imageUrl, description, price,id);
+  product.save();
+  res.redirect("/admin/products");
+};
+
+exports.deleteProduct = (req,res,next)=>{
+  const {id} = req.body;
+  console.log(Product.deleteById)
+  Product.deleteById(id,()=>{
+    res.redirect("/admin/products");
+  })
+}
