@@ -13,7 +13,7 @@ app.set('views', 'views');
 
 const db = require('./util/database.js');
 // console.log(db);
-db.execute('SELECT * from products').then((data)=>{console.log(data);})
+// db.execute('SELECT * from products').then((data)=>{console.log(data);})
 
 
 const adminRoutes = require('./routes/admin');

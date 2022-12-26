@@ -1,21 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-
-const p = path.join(
-  path.dirname(process.mainModule.filename),
-  'data',
-  'products.json'
-);
-
-const getProductsFromFile = cb => {
-  fs.readFile(p, (err, fileContent) => {
-    if (err) {
-      cb([]);
-    } else {
-      cb(JSON.parse(fileContent));
-    }
-  });
-};
+const db = require('../util/database');
 
 module.exports = class Product {
   constructor(title, imageUrl, description, price,id=null) {
@@ -27,45 +12,21 @@ module.exports = class Product {
   }
 
   save() {
-    console.log(this.id);
     if(this.id){
-      getProductsFromFile((products)=>{
-        const idX = products.findIndex(e=>e.id==this.id);
-        console.log(idX);
-        const updated = [...products];
-        updated[idX] = this;
-        fs.writeFile(p, JSON.stringify(updated), err => {
-          if(err)console.log(err);
-        });
-      })
+      return db.execute('update products set title = ?,price = ?, imageUrl = ?, description = ? where id=?',[this.title,this.price,this.imageUrl,this.description,this.id]);
     }else{
-      this.id = Math.random().toString();
-    getProductsFromFile(products => {
-      products.push(this);
-      fs.writeFile(p, JSON.stringify(products), err => {
-        if(err) console.log(err);
-      });
-    });
-    }
+      return db.execute('INSERT INTO products (title,price, imageUrl, description) values (?, ?, ?, ?)',[this.title,this.price,this.imageUrl,this.description]);
   }
-  static  getProduct(id,cb) {
-    getProductsFromFile((data)=>{
-      const product = data.find(e=>e.id==id);
-      cb(product);
-    })
+}
+  static  getProduct(id) {
+    return db.execute('select * from products where id=?',[id]);
   }
 
-  static deleteById(id,cb) {
-    getProductsFromFile((data)=>{
-      const products = data.filter(e=>e.id!=id);
-      fs.writeFile(p, JSON.stringify(products), err => {
-        if(err) console.log(err);
-      });
-      cb();
-    })
+  static deleteById(id) {
+  return db.execute('delete from products where id=?',[id]);
   }
 
-  static fetchAll(cb) {
-    getProductsFromFile(cb);
+  static fetchAll() {
+    return db.execute('select * from products');
   }
 };
