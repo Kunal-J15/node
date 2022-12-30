@@ -2,7 +2,7 @@ const Cart = require('../models/cart');
 const Product = require('../models/product');
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll().then(([products,meta]) => {
+  Product.findAll().then((products,meta) => {
     res.render('shop/product-list', {
       prods: products,
       pageTitle: 'All Products',
@@ -13,13 +13,13 @@ exports.getProducts = (req, res, next) => {
 
 exports.getProduct = (req, res, next) => {
   const {id} = req.params
-  return Product.getProduct(id)
-    .then(([p])=>res.render('shop/product-detail',{product:p[0],pageTitle:"Product Details",path:"/products"}))
+  return Product.findByPk(id)
+    .then((p)=>res.render('shop/product-detail',{product:p,pageTitle:"Product Details",path:"/products"}))
     .catch(e=>console.log(e));
 };
 
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll().then(([products,meta]) => {
+  Product.findAll().then((products) => {
     res.render('shop/index', {
       prods: products,
       pageTitle: 'Shop',
@@ -29,19 +29,43 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  res.render('shop/cart', {
-    path: '/cart',
-    pageTitle: 'Your Cart'
-  });
+  req.user.getCart().then(c=>{
+    c.getProducts().then(products=>{
+      for(let p of products) ;//console.log(p.title);
+      res.render('shop/cart', {
+        path: '/cart',
+        pageTitle: 'Your Cart',
+        products:products
+      });
+    })
+    
+  })
+  
 //   res.redirect("/cart")
 };
 
 exports.addToCart = (req, res, next) => {
     const id= req.body.id;
-    Product.getProduct(id,(p)=>{
-        Cart.addProduct(id,+p.price);
-    })
-    res.redirect("/cart");
+    let qty=1;
+    let krt;
+    req.user.getCart()
+    .then(cart=>{
+      krt=cart;
+      // console.log(cart);
+      return cart.getProducts({where:{ id:id}})
+    }).then(products=>{
+      let product;
+      if(products.length>0) product = products[0];
+      if(product){
+       qty = product.cartItem.quantity+1;
+      }
+      return Product.findByPk(id);
+      
+    }).then(product=>{
+      return krt.addProduct(product,{ through: { quantity : qty } })
+    }).then(temp=>{
+      res.redirect("/cart");
+    }).catch(e=>console.log(e));
   };
 
 exports.getOrders = (req, res, next) => {
