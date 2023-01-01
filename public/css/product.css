@@ -10,10 +10,6 @@
     border: solid black;
     width: 40%;
 }
-.product-inner-div {
-    margin: auto;
-    text-align: center;
-}
 .product-item {
     width: 20rem;
     max-width: 95%;

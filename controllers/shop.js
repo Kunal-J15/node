@@ -31,7 +31,6 @@ exports.getIndex = (req, res, next) => {
 exports.getCart = (req, res, next) => {
   req.user.getCart().then(c=>{
     c.getProducts().then(products=>{
-      for(let p of products) ;//console.log(p.title);
       res.render('shop/cart', {
         path: '/cart',
         pageTitle: 'Your Cart',
@@ -40,8 +39,6 @@ exports.getCart = (req, res, next) => {
     })
     
   })
-  
-//   res.redirect("/cart")
 };
 
 exports.addToCart = (req, res, next) => {
@@ -51,7 +48,6 @@ exports.addToCart = (req, res, next) => {
     req.user.getCart()
     .then(cart=>{
       krt=cart;
-      // console.log(cart);
       return cart.getProducts({where:{ id:id}})
     }).then(products=>{
       let product;
@@ -59,13 +55,20 @@ exports.addToCart = (req, res, next) => {
       if(product){
        qty = product.cartItem.quantity+1;
       }
-      return Product.findByPk(id);
-      
+      return Product.findByPk(id); 
     }).then(product=>{
-      return krt.addProduct(product,{ through: { quantity : qty } })
+      return krt.addProduct(product, { through: { quantity : qty } })
     }).then(temp=>{
       res.redirect("/cart");
     }).catch(e=>console.log(e));
+  };
+
+  exports.removeFromCart = (req, res, next) => {
+    req.user.getCart()
+                .then(c=>c.getProducts({where:{id:req.body.id}}))
+                .then(p=>p[0].destroy())
+                .then(res.redirect("/cart"))
+                .catch(e=>console.log(e));
   };
 
 exports.getOrders = (req, res, next) => {

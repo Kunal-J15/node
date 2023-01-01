@@ -188,13 +188,21 @@ form {
   border-radius: 3px;
   cursor: pointer;
 }
-
+.danger{
+  border: 1px solid red;
+  color: red;
+  background: white;
+}
 .btn:hover,
 .btn:active {
   background-color: #00695c;
   color: white;
 }
-
+.danger:hover,
+.danger:active {
+  background-color: tomato;
+  color: white;
+}
 @media (min-width: 768px) {
   .main-header__nav {
     display: flex;

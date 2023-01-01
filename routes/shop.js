@@ -12,12 +12,15 @@ router.get('/products', shopController.getProducts);
 
 router.get('/products/:id', shopController.getProduct);
 
-router.get('/cart', shopController.getCart);
-
-router.post('/add-to-cart', shopController.addToCart);
+router.route('/cart')
+                .get(shopController.getCart)
+                .post(shopController.addToCart)
+                .delete(shopController.removeFromCart);
 
 router.get('/orders', shopController.getOrders);
 
 router.get('/checkout', shopController.getCheckout);
+
+
 
 module.exports = router;

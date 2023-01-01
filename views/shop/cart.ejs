@@ -11,10 +11,10 @@
             <div class="product-div">
                 <h2><%=product.title %></h2>
                 <h3>Quantity : <%= product.cartItem.quantity %></h3>
-                <!-- <form action="/admin/delete-product?_method=DELETE" method="POST">
-                    <input type="hidden" name="id" value="<%=product.id%>"> -->
-                    <!-- <button class="btn danger" type="submit">Delete</button> -->
-                <!-- </form> -->
+                <form action="/cart?_method=DELETE" method="POST">
+                    <input type="hidden" name="id" value="<%=product.id%>">
+                    <button class="btn danger" type="submit">Delete</button>
+                </form>
             </div>
             <% } %>
         </ul>
