@@ -4,7 +4,12 @@
     margin: auto;
     display: block;
 }
-
+.product-div {
+    margin: auto;
+    text-align: center;
+    border: solid black;
+    width: 40%;
+}
 .product-item {
     width: 20rem;
     max-width: 95%;

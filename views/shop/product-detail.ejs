@@ -4,13 +4,13 @@
     <body>
         <%- include('../includes/navigation.ejs') %>
         <main class="centered">
-            <h1><%= product.title %></h1>
+            <h1><%= product._id %></h1>
             <hr>
-            <div class="image">
-                <img src="<%= product.imageUrl %>" alt="<%= product.title %>">
+            <div>
+                <img src="<%=product.imageUrl%>" alt="<%product.title%>">
             </div>
-            <h2><%= product.price %></h2>
-            <p><%= product.description %></p>
-            <%- include('../includes/add-to-cart.ejs') %>
+            <h3><%= product.price%></h3>
+            <h4><%=product.description%></h4>
+            <%-include('../includes/addtocart.ejs') %>
         </main>
-        <%- include('../includes/end.ejs') %>
+<%- include('../includes/end.ejs') %>
