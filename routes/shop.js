@@ -12,10 +12,10 @@ router.get('/products', shopController.getProducts);
 
 // router.get('/products/:id', shopController.getProduct);
 
-// router.route('/cart')
-//                 .get(shopController.getCart)
-//                 .post(shopController.addToCart)
-//                 .delete(shopController.removeFromCart);
+router.route('/cart')
+                .get(shopController.getCart)
+                .post(shopController.addToCart)
+                .delete(shopController.removeFromCart);
 
 // router.get('/orders', shopController.getOrders);
 

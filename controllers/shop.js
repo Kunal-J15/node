@@ -29,44 +29,25 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  req.user.getCart().then(c=>{
-    c.getProducts().then(products=>{
+  req.user.getCart().then(products=>{
       res.render('shop/cart', {
         path: '/cart',
         pageTitle: 'Your Cart',
         products:products
       });
     })
-    
-  })
 };
 
 exports.addToCart = (req, res, next) => {
     const id= req.body.id;
-    let qty=1;
-    let krt;
-    req.user.getCart()
-    .then(cart=>{
-      krt=cart;
-      return cart.getProducts({where:{ id:id}})
-    }).then(products=>{
-      let product;
-      if(products.length>0) product = products[0];
-      if(product){
-       qty = product.cartItem.quantity+1;
-      }
-      return Product.findByPk(id); 
-    }).then(product=>{
-      return krt.addProduct(product, { through: { quantity : qty } })
-    }).then(temp=>{
+    req.user.addToCart(id)
+    .then(temp=>{
       res.redirect("/cart");
     }).catch(e=>console.log(e));
   };
 
   exports.removeFromCart = (req, res, next) => {
-    req.user.getCart()
-                .then(c=>c.getProducts({where:{id:req.body.id}}))
-                .then(p=>p[0].destroy())
+    req.user.removeFromCart(req.body.id)
                 .then(res.redirect("/cart"))
                 .catch(e=>console.log(e));
   };

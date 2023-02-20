@@ -10,7 +10,7 @@
             <% for (let product of products) { %>
             <div class="product-div">
                 <h2><%=product.title %></h2>
-                <h3>Quantity : <%= product.cartItem.quantity %></h3>
+                <h3>Quantity : <%= product.quantity %></h3>
                 <form action="/cart?_method=DELETE" method="POST">
                     <input type="hidden" name="id" value="<%=product._id%>">
                     <button class="btn danger" type="submit">Delete</button>

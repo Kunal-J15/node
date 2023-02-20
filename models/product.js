@@ -4,16 +4,24 @@ const getDb =  require("../util/database").getDb;
 // const db = require('../util/database');
 
 class Product {
-  constructor(title,price,imageUrl,description){
+  constructor(title,price,imageUrl,description,id,userId){
     this.title=title;
     this.price=price;
     this.imageUrl = imageUrl;
     this.description = description;
+    this._id = id && new ObjectId(id);
+    this.userId = new ObjectId(userId);
   }
 
   save(){
     const db = getDb();
-    return db.collection('products').insertOne(this).then(result=>{console.log(result)}).catch(e=>{
+    let dbOp;
+    if(this._id){
+      dbOp=db.collection('products').updateOne({_id:this._id},{$set:this});
+    }else{
+      dbOp=db.collection('products').insertOne(this);
+    }
+    return dbOp.then(result=>result).catch(e=>{
       console.log(e)
       throw e;
     });
@@ -25,20 +33,14 @@ class Product {
   static findById(id){
     const db = getDb();
     return db.collection('products').find({_id: new ObjectId(id)}).next().then(product=>{
-    // console.log(product);
       return  product
     }).catch(e=>console.log(e));
   }
   static deleteById(id){
     const db = getDb();
-    return db.collection('products').deleteOne({_id: new ObjectId(id)}).then(product=>{
-    // console.log(product);
-      return  product
-    }).catch(e=>console.log(e));
+    return db.collection('products').deleteOne({_id: new ObjectId(id)}).then(product=>product).catch(e=>console.log(e));
   }
-  static findByIdAndUpdate(id,data){
-    const db = getDb();
-  }
+  
 }
 
 // const Product = sequelize.define('product',{

@@ -15,7 +15,7 @@ const mongoConnect = require('./util/database.js').mongoConnect;
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 // const Product = require('./models/product');
-// const User = require('./models/user');
+const User = require('./models/user');
 // const Cart = require('./models/cart');
 // const CartItem = require('./models/cart-item');
 
@@ -39,11 +39,10 @@ mongoConnect(u=>{
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use((req,res,next)=>{
-    // User.findByPk(1).then((u)=>{
-    //     req.user = u;
-    //     next();
-    // }); 
-    next();
+    User.findById("63f2519a831d003527cdbc2c").then((u)=>{
+        req.user = new User(u.name,u.email,u.cart,u._id);
+        next();
+    }); 
 })
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
