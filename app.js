@@ -38,12 +38,12 @@ mongoose.connect("mongodb+srv://Kunal:ZZedpfLBme2GFNBq@ecom.qeu0ozi.mongodb.net/
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-// app.use((req,res,next)=>{
-//     User.findById("63f2519a831d003527cdbc2c").then((u)=>{
-//         req.user = new User(u.name,u.email,u.cart,u._id);
-//         next();
-//     }); 
-// })
+app.use((req,res,next)=>{
+    User.findById("63f2519a831d003527cdbc2c").then((u)=>{
+        req.user = u;
+        next();
+    }); 
+})
 app.use('/admin', adminRoutes);
 // app.use(shopRoutes);
 
