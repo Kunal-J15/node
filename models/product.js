@@ -1,8 +1,29 @@
 
-const {ObjectId} = require("mongodb");
-const getDb =  require("../util/database").getDb;
+// const {ObjectId} = require("mongodb");
+// const getDb =  require("../util/database").getDb;
 // const db = require('../util/database');
+const mongoose = require("mongoose");
 
+const productSchema = new mongoose.Schema({
+  title:{
+    type:String,
+    require:true
+  },
+  description:{
+    type:String,
+    require:true
+  },
+  price:{
+    type:Number,
+    require:true
+  },
+  imageUrl:{
+    type:String,
+    require:true
+  }
+})
+
+module.exports = mongoose.model("Product",productSchema)
 class Product {
   constructor(title,price,imageUrl,description,id,userId){
     this.title=title;
@@ -64,7 +85,7 @@ class Product {
 //   },
 //   description : Sequelize.TEXT
 // });
-module.exports = Product;
+// module.exports = Product;
 // module.exports = class Product {
 //   constructor(title, imageUrl, description, price,id=null) {
 //     this.title = title;
