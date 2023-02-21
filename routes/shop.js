@@ -10,16 +10,16 @@ router.get('/', shopController.getIndex);
 
 router.get('/products', shopController.getProducts);
 
-// router.get('/products/:id', shopController.getProduct);
+router.get('/products/:id', shopController.getProduct);
 
 router.route('/cart')
                 .get(shopController.getCart)
                 .post(shopController.addToCart)
                 .delete(shopController.removeFromCart);
 
-// router.get('/orders', shopController.getOrders);
-
-// router.get('/checkout', shopController.getCheckout);
+router.get('/orders', shopController.getOrders);
+router.post("/create-order",shopController.createOrder);
+router.get('/checkout', shopController.getCheckout);
 
 
 

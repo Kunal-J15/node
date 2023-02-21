@@ -53,12 +53,19 @@ exports.addToCart = (req, res, next) => {
   };
 
 exports.getOrders = (req, res, next) => {
-  res.render('shop/orders', {
-    path: '/orders',
-    pageTitle: 'Your Orders'
+  req.user.getOrders().then(orders=>{
+    res.render('shop/orders', {
+      path: '/orders',
+      pageTitle: 'Your Orders',
+      orders
+    });
   });
+  
 };
-
+exports.createOrder = (req, res, next) => {
+  req.user.createOrder().then((o)=>{
+    res.redirect('/orders')})
+};
 exports.getCheckout = (req, res, next) => {
   res.render('shop/checkout', {
     path: '/checkout',
