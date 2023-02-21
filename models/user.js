@@ -30,6 +30,20 @@ const userSchema = new mongoose.Schema({
     }]
     }
 })
+
+userSchema.methods.addToCart = function (productId) {
+    const prodIdx = this.cart.items.findIndex(e=>e.productId.toString()===productId.toString());
+        const updatedCartItems = [...this.cart.items];
+        if(prodIdx!=-1){
+            updatedCartItems[prodIdx].quantity += 1;
+            
+        }else{
+            updatedCartItems.push({productId:productId,quantity:1});
+        }
+        this.cart.items = updatedCartItems;
+        return this.save();
+
+}
 module.exports = mongoose.model("User",userSchema);
 class User{
     constructor(name,email,cart,id){
@@ -44,16 +58,7 @@ class User{
     }
     addToCart(productId){
         const db = getDb();
-        const prodIdx = this.cart.items.findIndex(e=>e.productId.toString()===productId.toString());
-        const updatedCartItems = [...this.cart.items];
-        if(prodIdx!=-1){
-            updatedCartItems[prodIdx].quantity += 1;
-            
-        }else{
-            updatedCartItems.push({productId:new ObjectId(productId),quantity:1});
-        }
-        return db.collection("users").updateOne({_id:this._id},{$set:{cart:{items:updatedCartItems}}}).then(result=>result).catch(e=>console.log(e));
-    }
+            }
     getCart(){
         const db = getDb();
         const productsId = this.cart.items.map(p=>p.productId) ;
