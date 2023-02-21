@@ -44,6 +44,12 @@ userSchema.methods.addToCart = function (productId) {
         return this.save();
 
 }
+userSchema.methods.removeFromCart = function (productId) {
+    const items = this.cart.items.filter(e=>e.productId.toString()!== productId.toString());
+    this.cart.items = items;
+    return this.save();
+}
+
 module.exports = mongoose.model("User",userSchema);
 class User{
     constructor(name,email,cart,id){
@@ -86,8 +92,7 @@ class User{
     }
     removeFromCart(productId){
         const db = getDb();
-        const items = this.cart.items.filter(e=>e.productId.toString()!== productId.toString());
-        return db.collection("users").updateOne({_id:this._id},{$set:{cart:{items}}})
+
     }
     static findById(id){
         const db = getDb();

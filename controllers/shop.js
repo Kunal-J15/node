@@ -13,7 +13,7 @@ exports.getProducts = (req, res, next) => {
 
 exports.getProduct = (req, res, next) => {
   const {id} = req.params
-  return Product.findByPk(id)
+  return Product.findById(id)
     .then((p)=>res.render('shop/product-detail',{product:p,pageTitle:"Product Details",path:"/products"}))
     .catch(e=>console.log(e));
 };
